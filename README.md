@@ -1,6 +1,8 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.22306006.svg)](https://doi.org/10.5281/zenodo.22306006)
+
 # Code to process data from an open repository on spinal mobility
 
-This repository contains the code to process data in the "[Spinal mobility data](https://doi.org/UPDATE)" open dataset.
+This repository contains the code to process data in the "[Spinal mobility data](https://doi.org/10.57745/HKPJO1)" open dataset.
 
 The full description of the dataset, protocol and cohort will be published soon. The repository will be update with automatic data download soon.
 
