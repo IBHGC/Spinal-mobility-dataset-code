@@ -2,30 +2,50 @@ clear
 clc
 close all
 
-% This function loads the full spinal mobility data and plots some example
-% graphs.
 
-% Local folder with data
-folder = [fileparts(mfilename('fullpath')) '\Data\'];
+%%
+% This script downloads the data from the repository "Spinal mobility data"
+% and plots spinal mobility in flexion/extension, axial rotation and
+% lateral bending.
+% VERGARI, Claudio; Merat, Ulyss; Crezé, Maud; Pillet, Hélène, 2026, "Spinal mobility data", 
+% DOI: https://doi.org/10.57745/HKPJO1 
+
+download_url = 'https://entrepot.recherche.data.gouv.fr/api/access/datafile/:persistentId?persistentId=doi:';
+repository_DOI  = '10.57745';
+% These are the DOIs associated with each subject CSV file
+data_DOIs = {'JOISHA','NHNQWG', '9UEJK8','5GHNZF','QFGPQ3','LHRHDX',...
+    'WSNCQY','DESVZB','NZXBCG','4VQCRN','CKBOCG','QSFHKN','KN4RWM','HHNY1Y','UHEEDS'};
+
+
+Nsubjects = length(data_DOIs);
+
+% Helper function to retrieve coordinates of a specific landmark
+retrieveCoords = @(N, landmark) [data.([landmark, '_x'])(N), data.([landmark, '_y'])(N), data.([landmark, '_z'])(N)];
+
+% Local folder to download data
+folder = [fileparts(mfilename('fullpath')) '\'];
 
 f = figure;
 colors = lines(15);
 
-for nSubject = 1 : 15
-    file = [folder '\Subject_' sprintf('%02d',nSubject) '.xlsx'];
-    assert(exist(file, 'file'))
+for nSubject = 1:Nsubjects
+    
+    % Download data for nSubject
+    disp(['Downloading and processing subject ' num2str(nSubject)])
+    file_url = [download_url, repository_DOI, '/', data_DOIs{nSubject}];
+    websave([folder 'repository_data.csv'], file_url);
 
-    % Read from excel file
-    data = readcell(file);
+    % Read data
+    data = readcell([folder 'repository_data.csv']);
 
     % Flexion-extension
-    make_plots(data(3:9, 2:end), colors(nSubject,:), 1)
+    make_plots(data(2:8, 2:end), colors(nSubject,:), 1)
     
     % Axial rotation
-    make_plots(data(11:17, 2:end), colors(nSubject,:), 4)
+    make_plots(data(9:15, 2:end), colors(nSubject,:), 4)
     
     % Lateral bending
-    make_plots(data(19:25, 2:end), colors(nSubject,:), 7)
+    make_plots(data(16:22, 2:end), colors(nSubject,:), 7)
     
 end
 
